@@ -7,6 +7,7 @@ Input:
 * Stroke
 * Rod length
 * Max combustion force + position
+
 Output:
 * Polar Plot of Crank Torque
 
@@ -14,5 +15,6 @@ Output:
 Input:
 * Piston Weight
 * position CG
+
 Output: 
 * Balancing
