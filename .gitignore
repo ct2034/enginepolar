@@ -26,3 +26,8 @@
 *.exe
 *.out
 *.app
+
+# CH
+plot*.png
+*.jpg
+qt/build*
