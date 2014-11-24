@@ -1,6 +1,7 @@
 Requirements
+------------
 
-=Basic=
+# Basic #
 Input:
 * V-Angle
 * Firing Angles
@@ -10,7 +11,7 @@ Input:
 Output:
 * Polar Plot of Crank Torque
 
-=Advanced=
+# Advanced #
 Input:
 * Piston Weight
 * position CG
