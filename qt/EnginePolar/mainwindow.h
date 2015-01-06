@@ -17,10 +17,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void setValidators();
+    bool callOctave(int input[], char* output);
 
 private slots:
-  void clickMenuButton();
-  void on_pushButton_clicked();
+    void clickMenuButton();
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H
