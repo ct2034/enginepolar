@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <QMessageBox>
 #include <QGraphicsView>
 #include <QThread>
@@ -57,6 +58,7 @@ void MainWindow::setValidators()
 
 bool MainWindow::callOctave(int input[], char* output)
 {
+    int waitTime = 3000;
     QString program = "c:\\windows\\system32\\cmd.exe";
     QStringList arguments;
     arguments << " "; // "C:\\temp\\enginepolar.m";
@@ -73,22 +75,31 @@ bool MainWindow::callOctave(int input[], char* output)
     }
 
     // Show process output
-    myProcess->waitForReadyRead();
+    myProcess->waitForReadyRead(waitTime);
+    qDebug() << myProcess->readAllStandardOutput();
+    myProcess->waitForReadyRead(waitTime);
     qDebug() << myProcess->readAllStandardOutput();
 
-    //myProcess->write("c:\\cygwin64\\bin\\bash.exe");
+    myProcess->write("ipconfig");
+//    myProcess->write("c:\\cygwin64\\bin\\bash.exe");
+    myProcess->waitForBytesWritten(waitTime);
 
-    myProcess->waitForBytesWritten();
-    myProcess->waitForReadyRead();
-    myProcess->waitForBytesWritten();
+//    myProcess->waitForBytesWritten();
+    qDebug() << myProcess->readAllStandardOutput();
+    myProcess->waitForReadyRead(waitTime);
     qDebug() << myProcess->readAllStandardOutput();
 
-    //myProcess->write("ls");
-
-    myProcess->waitForReadyRead();
-    myProcess->waitForBytesWritten();
-    myProcess->waitForReadyRead();
+    myProcess->write("8*5");
+    myProcess->waitForBytesWritten(waitTime);
+    myProcess->waitForReadyRead(waitTime);
     qDebug() << myProcess->readAllStandardOutput();
+
+//    //myProcess->write("ls");
+
+//    myProcess->waitForReadyRead();
+//    myProcess->waitForBytesWritten();
+//    myProcess->waitForReadyRead();
+//    qDebug() << myProcess->readAllStandardOutput();
 
     myProcess->close();
 
