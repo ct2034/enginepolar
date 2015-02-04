@@ -22,6 +22,10 @@ CAs_i = [  0  60 240 300 120 180]; %deg Crank Angles
 %CAs_i = [ 90  90  90  90  90  90]; %deg Crank Angles
 FAs_i = PAs_i - CAs_i + 90; %deg Firing Angles
 
+FAs_i = modulo(FAs_i)
+CAs_i = modulo(CAs_i)
+PAs_i = modulo(PAs_i)
+
 FAs = FAs_i / 180*pi;
 CAs = CAs_i / 180*pi;
 PAs = PAs_i / 180*pi;
