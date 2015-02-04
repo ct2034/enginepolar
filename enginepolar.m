@@ -14,7 +14,7 @@ F_min = 100;
 %geometry
 rod = .040; %m 
 stroke = .060; %m
-V_a = 130; %deg V_angle
+V_a = 180; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 %firing
 CAs_i = [  0  60 240 300 120 180]; %deg Crank Angles
@@ -25,7 +25,6 @@ FAs_i = PAs_i - CAs_i + 90; %deg Firing Angles
 FAs = FAs_i / 180*pi;
 CAs = CAs_i / 180*pi;
 PAs = PAs_i / 180*pi;
-
 
 % basic cos
 cosforce = @(angle) (F_max-F_min)/2.*cos(rad.-angle).+(F_max-F_min)/2+F_min;
