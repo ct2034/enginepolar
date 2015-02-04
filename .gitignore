@@ -28,6 +28,6 @@
 *.app
 
 # CH
-plot*.png
+#plot*.png
 *.jpg
 qt/build*
