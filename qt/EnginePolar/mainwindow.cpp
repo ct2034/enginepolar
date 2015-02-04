@@ -7,6 +7,12 @@
 #include <QProcess>
 #include <QDebug>
 
+void someOutput(QProcess *myProcess){
+  qDebug() << "out: " << myProcess->readAllStandardOutput();
+  qDebug() << "envo: " << myProcess->environment();
+  qDebug() << "error: " << myProcess->error();
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -58,8 +64,9 @@ void MainWindow::setValidators()
 
 bool MainWindow::callOctave(int input[], char* output)
 {
-    int waitTime = 3000;
-    QString program = "c:\\windows\\system32\\cmd.exe";
+    int waitTime = 6000;
+    // QString program = "c:\\windows\\system32\\cmd.exe";
+    QString program = "C:\\cygwin64\\bin\\bash.exe";
     QStringList arguments;
     arguments << " "; // "C:\\temp\\enginepolar.m";
 
@@ -76,23 +83,27 @@ bool MainWindow::callOctave(int input[], char* output)
 
     // Show process output
     myProcess->waitForReadyRead(waitTime);
-    qDebug() << myProcess->readAllStandardOutput();
+    someOutput(myProcess);
     myProcess->waitForReadyRead(waitTime);
-    qDebug() << myProcess->readAllStandardOutput();
+    someOutput(myProcess);
 
-    myProcess->write("ipconfig");
-//    myProcess->write("c:\\cygwin64\\bin\\bash.exe");
-    myProcess->waitForBytesWritten(waitTime);
-
-//    myProcess->waitForBytesWritten();
-    qDebug() << myProcess->readAllStandardOutput();
-    myProcess->waitForReadyRead(waitTime);
-    qDebug() << myProcess->readAllStandardOutput();
-
-    myProcess->write("8*5");
+    myProcess->write("ls\n");
+//    myProcess->write("C:\\cygwin64\\bin\\bash.exe\n");
     myProcess->waitForBytesWritten(waitTime);
     myProcess->waitForReadyRead(waitTime);
-    qDebug() << myProcess->readAllStandardOutput();
+    someOutput(myProcess);
+
+    myProcess->waitForReadyRead(waitTime);
+    someOutput(myProcess);
+
+    myProcess->write("8*5\n");
+    myProcess->waitForBytesWritten(waitTime);
+
+    myProcess->waitForReadyRead(waitTime);
+    someOutput(myProcess);
+
+    myProcess->waitForReadyRead(waitTime);
+    someOutput(myProcess);
 
 //    //myProcess->write("ls");
 
@@ -105,3 +116,5 @@ bool MainWindow::callOctave(int input[], char* output)
 
     return true;
 }
+
+

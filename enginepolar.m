@@ -1,24 +1,23 @@
 function img = enginepolar (V_a, CAs_i, F_max, F_min)
 	% This is a simple 2-stroke engine design tool. It produces a polar plot of the crank torque per angle.
 	close all
-	%clear -exclusive V_a
 	debug = 0;
 
 	% defining variables
 	%calc
-	res = 1000; %points per revolution
+	res = 100; %points per revolution
 	rad = [0:2*pi/res:2*pi]; %circular coordinate
 	scale = 30	; % display scale for rodforce
 	%forces
-	%F_max = 1000; %N maximal force (at TDC)
-	%F_min = 100;
+	F_max = 1000; %N maximal force (at TDC)
+	F_min = 100;
 	%geometry
 	rod = .040; %m 
 	stroke = .060; %m
-	%V_a = 150; %deg V_angle
+	V_a = 150; %deg V_angle
 	PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 	%firing
-	%CAs_i = [  0  60 240 300 120 180]; %deg Crank Angles
+	CAs_i = [  0  60 240 300 120 180]; %deg Crank Angles
 	%CAs_i = [  0   0   0   0   0   0]; %deg Crank Angles
 	%CAs_i = [ 90  90  90  90  90  90]; %deg Crank Angles
 	FAs_i = 90 + PAs_i - CAs_i; %deg Firing Angles
@@ -79,16 +78,24 @@ function img = enginepolar (V_a, CAs_i, F_max, F_min)
 	end
 
 	% display
-	figure(1, "visible", "off");
-	disp off;
+	figure('Position',[100,100,1000,700]);                                                                                                                                          
+  subplot('Position',[.1 .1 .6 .8]);
+	%disp off;
 	polar(rad, sum(cranktorque))
+  grid on;
 	hold on;
 	%polar(rad, 1/scale*sum(rodforce), 'r')
 	%polar(rad, 1/scale*rodforce)
 
-	axis equal;
-	legend('Crank Torque (Nm)'); %, strcat(int2str(scale), '\1 * Rod Forces (N)'));
-	title(strcat('Polar Plot == with FAs: ', mat2str(FAs_i), ', CAs: ', mat2str(CAs_i), ', Vangle: ', mat2str(V_a), ', min crank torque: ', mat2str(mincranktorque)));
-	hold off;	
+	axis equal;                            
+	%legend('Crank Torque (Nm)'); %, strcat(int2str(scale), '\1 * Rod Forces (N)'));
+	title('Crank Torque (Nm)');
+	text (1.05*max(sum(cranktorque)), 0, strcat(
+  'FAs: ', mat2str(FAs_i), 
+  "\nCAs: ", mat2str(CAs_i), 
+  "\nVangle: ", mat2str(V_a), 
+  "\nmin crank torque:  ", substr(mat2str(min(sum(cranktorque))), 1, 5), 
+  "\nmax crank torque:  ", substr(mat2str(max(sum(cranktorque))), 1, 5)));
+  hold off;	
 	img = CH_save_plot();
 endfunction
