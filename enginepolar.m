@@ -1,7 +1,7 @@
 %function img = enginepolar (V_a, CAs_i, F_max, F_min)
 % This is a simple 2-stroke engine design tool. It produces a polar plot of the crank torque per angle.
 close all
-debug = 0;
+debug = 1;
 
 % defining variables
 %calc
@@ -16,6 +16,7 @@ rod = .040; %m
 stroke = .060; %m
 V_a = 180; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
+strokeAtTDC = rod + stroke/2
 %firing
 CAs_i = [  0  60 240 300 120 180]; %deg Crank Angles
 %CAs_i = [  0   0   0   0   0   0]; %deg Crank Angles
@@ -30,13 +31,21 @@ FAs = FAs_i / 180*pi;
 CAs = CAs_i / 180*pi;
 PAs = PAs_i / 180*pi;
 
-% basic cos
-cosforce = @(angle) (F_max-F_min)/2.*cos(rad.-angle).+(F_max-F_min)/2+F_min;
-
-% piston force
+% piston force\	
 pistonforce = zeros(length(FAs), length(rad));
+strokePerRotation = zeros(length(FAs), length(rad));
+onehalf = zeros(length(FAs), length(rad));
+width = zeros(length(FAs), length(rad));
+twohalf = zeros(length(FAs), length(rad));
 for i = 1:length(FAs)
-  pistonforce(i,:) = cosforce(FAs(i));
+  onehalf(i,:) = stroke/2 * cos(CAs(i) - rad);
+  width(i,:) = stroke/2 * sin(CAs(i) - rad);
+  twohalf(i,:) = sqrt(rod**2 - width(i,:).**2);
+  strokePerRad(i,:) = strokeAtTDC - onehalf(i,:) - twohalf(i,:);
+end
+
+for i = 1:length(FAs)
+  pistonforce(i,:) = rad;
 end
 
 %crank angle
@@ -67,6 +76,9 @@ cranktorque = rodforce .* stroke/2 .* sin(crankrodangle);
 % offset
 mincranktorque = min( sum( cranktorque ) );
 
+min( min( strokePerRad ) )
+max( max( strokePerRad ) )
+
 i = 2;
 if debug
   plot ( rad*180/pi, pistonforce(i,:)/ 2);
@@ -74,9 +86,10 @@ if debug
   plot ( rad*180/pi, crankangle(i,:)* 180/pi, 'r' );
   plot ( rad*180/pi, rodangle(i,:)* 180/pi, 'g' );
   plot ( rad*180/pi, rodforce(i,:) / 2, 'm' );
-  plot ( rad*180/pi, crankrodangle(i,:)* 180/pi, 'k' );
+  %plot ( rad*180/pi, crankrodangle(i,:)* 180/pi, 'k' );
+  plot ( rad*180/pi, 10 * strokePerRad(i,:)* 180/pi, 'k' );
   hold off;
-  legend('pistonforce', 'crankangle', 'rodangle', 'rodforce', 'crankrodangle');
+  legend('pistonforce', 'crankangle', 'rodangle', 'rodforce', 'strokePerRad');
   CH_save_plot();
 end
 
