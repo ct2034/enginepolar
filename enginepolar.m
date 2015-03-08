@@ -1,12 +1,14 @@
 %function img = enginepolar (V_a, CAs_i, F_max, F_min)
 % This is a simple 2-stroke engine design tool. It produces a polar plot of the crank torque per angle.
 close all
+clear all
 debug = 1;
 
 % defining variables
 %calc
 res = 500; %points per revolution
-rad = [0:2*pi/res:2*pi]; %circular coordinate
+d = 2*pi/res;
+rad = [0:d:2*pi-d]; %circular coordinate
 scale = 30	; % display scale for rodforce
 %forces
 F_max = 1000; %N maximal force (at TDC)
@@ -32,16 +34,17 @@ CAs = CAs_i / 180*pi;
 PAs = PAs_i / 180*pi;
 
 % piston force\	
-pistonforce = zeros(length(FAs), length(rad));
+pistonforce       = zeros(length(FAs), length(rad));
 strokePerRotation = zeros(length(FAs), length(rad));
-onehalf = zeros(length(FAs), length(rad));
-width = zeros(length(FAs), length(rad));
-twohalf = zeros(length(FAs), length(rad));
+onehalf           = zeros(length(FAs), length(rad));
+width             = zeros(length(FAs), length(rad));
+twohalf           = zeros(length(FAs), length(rad));
 for i = 1:length(FAs)
   onehalf(i,:) = stroke/2 * cos(CAs(i) - rad);
   width(i,:) = stroke/2 * sin(CAs(i) - rad);
   twohalf(i,:) = sqrt(rod**2 - width(i,:).**2);
-  strokePerRad(i,:) = strokeAtTDC - onehalf(i,:) - twohalf(i,:);
+  strokePerRad(i,:) = strokeAtTDC .- onehalf(i,:) .- twohalf(i,:);
+  pistonforce(i,:) = interpolate(strokePerRad(i,:));
 end
 
 for i = 1:length(FAs)

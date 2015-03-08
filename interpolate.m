@@ -6,10 +6,24 @@ function force = interpolate(coords)
   % bottom half
   p2 =  [7   5   3   2   1.4 .75 .55 .4  .37 .35 .3  .31 .32] * 5.7;
 
+  % STROKE -> VOL
+  Stroke = max(coords) - min(coords);
+  Volume = max(vol) - min(vol);
+  Cyl_Area = Volume / Stroke;
+  Cyl_Diameter = sqrt(Cyl_Area / pi) * 2
+  
   % INTERPOLATION
-  l = length(coords);
+  l = length(coords)
+  coords = (coords-min(coords))/Cyl_Area + min(vol);
   p1i = interp1 (vol, p1, coords(1:l/2), "spline");
   p2i = interp1 (vol, p2, fliplr(coords(l/2+1:l)), "spline");
   
   force = [p1i fliplr(p2i)];
+  
+  plot(vol, p1, 'b');
+  hold on;
+  grid on;
+  plot(vol, p2, 'b');
+  plot(coords, force, 'r');
+  legend(['data'; ' '; 'interpolated']);
 end
