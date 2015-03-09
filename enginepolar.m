@@ -6,7 +6,7 @@ debug = 1;
 
 % defining variables
 %calc
-res = 500; %points per revolution
+res = 100; %points per revolution
 d = 2*pi/res;
 rad = [0:d:2*pi-d]; %circular coordinate
 scale = 30	; % display scale for rodforce
@@ -16,7 +16,7 @@ F_min = 100;
 %geometry
 rod = .040; %m 
 stroke = .060; %m
-V_a = 180; %deg V_angle
+V_a = 120; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 strokeAtTDC = rod + stroke/2
 %firing
@@ -47,10 +47,6 @@ for i = 1:length(FAs)
   pistonforce(i,:) = interpolate(strokePerRad(i,:));
 end
 
-for i = 1:length(FAs)
-  pistonforce(i,:) = rad;
-end
-
 %crank angle
 crankangle = zeros(length(FAs), length(rad));
 for i = 1:length(FAs)
@@ -79,26 +75,27 @@ cranktorque = rodforce .* stroke/2 .* sin(crankrodangle);
 % offset
 mincranktorque = min( sum( cranktorque ) );
 
-min( min( strokePerRad ) )
-max( max( strokePerRad ) )
-
-i = 2;
+i = 1;
 if debug
-  plot ( rad*180/pi, pistonforce(i,:)/ 2);
-  hold on;
-  plot ( rad*180/pi, crankangle(i,:)* 180/pi, 'r' );
-  plot ( rad*180/pi, rodangle(i,:)* 180/pi, 'g' );
-  plot ( rad*180/pi, rodforce(i,:) / 2, 'm' );
-  %plot ( rad*180/pi, crankrodangle(i,:)* 180/pi, 'k' );
-  plot ( rad*180/pi, 10 * strokePerRad(i,:)* 180/pi, 'k' );
-  hold off;
-  legend('pistonforce', 'crankangle', 'rodangle', 'rodforce', 'strokePerRad');
-  CH_save_plot();
+  for i = 1:length(FAs)
+    figure;
+    plot ( rad*180/pi, pistonforce(i,:));
+    hold on;
+    plot ( rad*180/pi, crankangle(i,:)* 18/pi, 'r' );
+    plot ( rad*180/pi, rodangle(i,:)* 180/pi, 'g' );
+    plot ( rad*180/pi, rodforce(i,:) / 2, 'm' );
+    %plot ( rad*180/pi, crankrodangle(i,:)* 180/pi, 'k' );
+    plot ( rad*180/pi, 10 * strokePerRad(i,:)* 180/pi, 'k' );
+    plot ( rad*180/pi, cranktorque(i,:)*100);
+    hold off;
+    legend('pistonforce', 'crankangle', 'rodangle', 'rodforce', 'strokePerRad', 'cranktorque');
+    CH_save_plot();
+  endfor
 end
 
 % display
 figure('Position',[100,100,1000,700]);                                                                                                                                          
-subplot('Position',[.1 .1 .6 .8]);
+%subplot('Position',[.1 .1 .6 .8]);
 %disp off;
 polar(rad, sum(cranktorque))
 grid on;
