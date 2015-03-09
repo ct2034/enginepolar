@@ -16,7 +16,7 @@ F_min = 100;
 %geometry
 rod = .040; %m 
 stroke = .060; %m
-V_a = 120; %deg V_angle
+V_a = 180; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 strokeAtTDC = rod + stroke/2
 %firing
@@ -39,19 +39,20 @@ strokePerRotation = zeros(length(FAs), length(rad));
 onehalf           = zeros(length(FAs), length(rad));
 width             = zeros(length(FAs), length(rad));
 twohalf           = zeros(length(FAs), length(rad));
-for i = 1:length(FAs)
-  onehalf(i,:) = stroke/2 * cos(CAs(i) - rad);
-  width(i,:) = stroke/2 * sin(CAs(i) - rad);
-  twohalf(i,:) = sqrt(rod**2 - width(i,:).**2);
-  strokePerRad(i,:) = strokeAtTDC .- onehalf(i,:) .- twohalf(i,:);
-  pistonforce(i,:) = interpolate(strokePerRad(i,:));
-end
 
 %crank angle
 crankangle = zeros(length(FAs), length(rad));
 for i = 1:length(FAs)
   crankangle(i,:) = rad + CAs(i) - PAs(i);
   crankangle(i,:) = mod(crankangle(i,:), 2*pi);
+end
+
+for i = 1:length(FAs)
+  onehalf(i,:) = stroke/2 * cos(crankangle(i,:));
+  width(i,:) = stroke/2 * sin(crankangle(i,:));
+  twohalf(i,:) = sqrt(rod**2 - width(i,:).**2);
+  strokePerRad(i,:) = strokeAtTDC .- onehalf(i,:) .- twohalf(i,:);
+  pistonforce(i,:) = interpolate(strokePerRad(i,:));
 end
 
 %rod angle
@@ -70,7 +71,7 @@ for i = 1:length(FAs)
 end
 
 % crank torque
-cranktorque = rodforce .* stroke/2 .* sin(crankrodangle);
+cranktorque = -rodforce .* stroke/2 .* sin(crankrodangle);
 
 % offset
 mincranktorque = min( sum( cranktorque ) );

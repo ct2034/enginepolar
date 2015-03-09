@@ -18,9 +18,6 @@ function force = interpolate(coords)
   l = length(coords);
   coords = (max(coords)-coords)*Cyl_Area + min(vol);
   
-  ai
-  ii
-  
   it = 1;
   ib = 1;
   if ai > ii
@@ -77,9 +74,6 @@ function force = interpolate(coords)
       ib += 1;
     endif
   endfor  
-  
-  it
-  ib
   
   % figure;
   % plot(vol, p1, 'b');
