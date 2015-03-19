@@ -2,7 +2,7 @@
 % This is a simple 2-stroke engine design tool. It produces a polar plot of the crank torque per angle.
 close all
 clear all
-debug = 1;
+debug = 0;
 
 % defining variables
 %calc
@@ -16,7 +16,7 @@ F_min = 100;
 %geometry
 rod = .040; %m 
 stroke = .060; %m
-V_a = 180; %deg V_angle
+V_a = 120; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 strokeAtTDC = rod + stroke/2
 %firing
