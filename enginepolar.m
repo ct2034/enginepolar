@@ -6,7 +6,7 @@ debug = 0;
 
 % defining variables
 %calc
-res = 100; %points per revolution
+res = 500; %points per revolution
 d = 2*pi/res;
 rad = [0:d:2*pi-d]; %circular coordinate
 scale = 30	; % display scale for rodforce
@@ -16,7 +16,7 @@ F_min = 100;
 %geometry
 rod = .040; %m 
 stroke = .060; %m
-V_a = 120; %deg V_angle
+V_a = 180; %deg V_angle
 PAs_i = [V_a/2 -V_a/2 V_a/2 -V_a/2 V_a/2 -V_a/2]; %deg Piston Angles
 strokeAtTDC = rod + stroke/2
 %firing
